@@ -1,20 +1,12 @@
 from questionnaires_processor import read_file
-from utils import get_phone_mask
+from utils import get_phone_mask, find_cols_width
 from config import ACCEPTED_FILE, REJECTED_FILE
 
-def find_cols_width(quest_dict):
-    cols_width = {}
-
-    cols_width["№"] = len(quest_dict) + 3
-    cols_width["ФИО"] = max(len(name) for name in [v.get("name", None) for v in list(quest_dict.values())]) + 3
-    cols_width["Email"] = max(len(email) for email in [v.get("email", None) for v in list(quest_dict.values())]) + 3
-    cols_width["Телефон"] = max(len(phone) for phone in [v.get("phone", None) for v in list(quest_dict.values())]) + 3
-    cols_width["Группа"] = max(len(group) for group in [v.get("group", None) for v in list(quest_dict.values())]) + 3
-
-    return cols_width
+COL_HEADER_KEY = {"№": None, "ФИО": "name", "Эл.адрес": "email", 
+                  "Телефон": "phone", "Группа": "group"}
 
 def print_accepted_questionnaires(quest_dict):
-    cols_width = find_cols_width(quest_dict)
+    cols_width = find_cols_width(quest_dict, COL_HEADER_KEY)
     headers = []
     for k, v in cols_width.items():
         headers.append(f"{k:<{v}}")
@@ -26,9 +18,16 @@ def print_accepted_questionnaires(quest_dict):
     print(headers)
     print("-" * len(headers))
     for v in sorted_dict.values():
-        masked_phone = v["phone"]
-        print(f"{i:<{cols_width["№"]}}{v["name"]:<{cols_width["ФИО"]}}{v["email"]:<{cols_width["Email"]}}" +
-        f"{masked_phone:<{cols_width["Телефон"]}}{v["group"]:<{cols_width["Группа"]}}")
+        masked_phone = get_phone_mask(v["phone"])
+        record = []
+        for header, key in COL_HEADER_KEY.items():
+            if key is None:
+                record.append(f"{i:<{cols_width[header]}}")
+            elif key == "phone":
+                record.append(f"{masked_phone:<{cols_width[header]}}")
+            else:
+                record.append(f"{v[key]:<{cols_width[header]}}")
+        print("".join(record))
         i += 1
     print("-" * len(headers))
     print("\n")
