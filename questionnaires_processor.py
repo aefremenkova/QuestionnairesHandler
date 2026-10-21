@@ -1,6 +1,6 @@
 import os
 from enum import Enum
-from config import QUEST_FILE, FIELDS_NUM, FIELDS_SEPARATOR, FIELD_TYPES, ACCEPTED_FILE, REJECTED_FILE
+from config import QUEST_FILE, FIELDS_NUM, FIELDS_SEPARATOR, FIELD_TYPES
 from name import process_name
 from email_address import process_email
 from phone_number import process_phone_number
@@ -35,15 +35,6 @@ def process_field(field, field_type):
     data = answer["description"]
 
     return res, data
-
-def save_results(ok, reject):
-    with open(ACCEPTED_FILE, "w", encoding="utf-8") as f:
-        for record in ok.values():
-            f.write(";".join(list(record.values())) + "\n")
-
-    with open(REJECTED_FILE, "w", encoding="utf-8") as f:
-        for record in reject.values():
-            f.write(f"{record["data"]}" + f";[{";".join(record["errors"])}]" + "\n")
 
 def read_file():
     res, descr = verify_file(QUEST_FILE)
@@ -85,8 +76,6 @@ def read_file():
                                   "phone": normalized_fields[2], "group": normalized_fields[3]}
             else:
                 reject[record_num] = {"data": line, "errors": errors}
-
-            save_results(ok, reject)
 
     return {"result": True, "description": {"accepted": ok, "rejected": reject, "skipped": skipped}}
 

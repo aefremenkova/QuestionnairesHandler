@@ -32,6 +32,7 @@
     <Compile Include="config.py" />
     <Compile Include="utils.py" />
     <Compile Include="report.py" />
+    <Compile Include="storage.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="anketa.txt" />
