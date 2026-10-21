@@ -1,5 +1,5 @@
 from questionnaires_processor import read_file
-from phone_number import get_phone_mask
+from utils import get_phone_mask
 from config import ACCEPTED_FILE, REJECTED_FILE
 
 def find_cols_width(quest_dict):

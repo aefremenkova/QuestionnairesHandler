@@ -1,10 +1,3 @@
-def get_phone_mask(phone):
-    digits = [s for s in phone if s.isdigit()]
-
-    mask_phone_parts = ["+7", f"({digits[1:4]})", f"***-**-{digits[9-11]}"]
-
-    return " ".join(mask_phone_parts)
-
 def normalize_phone_number(phone):
     digits = [s for s in phone if s.isdigit()]
 

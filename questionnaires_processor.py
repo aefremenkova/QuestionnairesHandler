@@ -5,6 +5,7 @@ from name import process_name
 from email_address import process_email
 from phone_number import process_phone_number
 from group import process_group
+from utils import group_by_key
 
 def verify_file(file_name):
     if not os.path.exists(file_name):
@@ -34,13 +35,6 @@ def process_field(field, field_type):
     data = answer["description"]
 
     return res, data
-
-def group_by_key(dict_list, key):
-    grouped = {}
-    for d in dict_list:
-        group_key = d[key]
-        grouped.setdefault(group_key, []).append(d)
-    return grouped
 
 def analyze_result(ok, reject, skip):
     analysis = {"Всего строк в файле": len(ok) + len(reject) + skip,
