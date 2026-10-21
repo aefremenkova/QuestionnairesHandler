@@ -36,18 +36,6 @@ def process_field(field, field_type):
 
     return res, data
 
-def analyze_result(ok, reject, skip):
-    analysis = {"Всего строк в файле": len(ok) + len(reject) + skip,
-                "Принято": len(ok), "Отклонено": len(reject),
-                "По группам": {}}
-
-    groupped = group_by_key(list(ok.values()), "group")
-
-    for group, records in groupped.items():
-        analysis["По группам"][group] = len(records)
-
-    return analysis
-
 def save_results(ok, reject):
     with open(ACCEPTED_FILE, "w", encoding="utf-8") as f:
         for record in ok.values():
@@ -98,10 +86,9 @@ def read_file():
             else:
                 reject[record_num] = {"data": line, "errors": errors}
 
-            analysis_res = analyze_result(ok, reject, skipped)
             save_results(ok, reject)
 
-    return {"result": True, "description": {"accepted": ok, "rejected": reject, "analysis": analysis_res}}
+    return {"result": True, "description": {"accepted": ok, "rejected": reject, "skipped": skipped}}
 
             
                 

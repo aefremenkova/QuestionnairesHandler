@@ -31,6 +31,7 @@
     <Compile Include="questionnaires_processor.py" />
     <Compile Include="config.py" />
     <Compile Include="utils.py" />
+    <Compile Include="report.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="anketa.txt" />
