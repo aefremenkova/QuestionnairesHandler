@@ -6,6 +6,7 @@ from email_address import process_email
 from phone_number import process_phone_number
 from group import process_group
 from utils import group_by_key
+from storage import read_file
 
 def verify_file(file_name):
     if not os.path.exists(file_name):
@@ -36,7 +37,7 @@ def process_field(field, field_type):
 
     return res, data
 
-def read_file():
+def process_records():
     res, descr = verify_file(QUEST_FILE)
     if not res:
         return {"result": False, "description": descr}
@@ -45,37 +46,37 @@ def read_file():
     ok = {}
     skipped = 0
 
-    with open(QUEST_FILE, "r", encoding="utf-8") as f:
-        record_num = 0
-        for line in f:
-            record_num += 1
-            line = line.rstrip("\n")
-            if len(line) == 0:
-                skipped += 1
-                continue
+    records = read_file()
+    for i in range(len(records)):
+        record_num = i + 1
+        line = records[i].rstrip("\n")
 
-            res, descr = verify_fields_num(line)
-            if not res:
-                reject[record_num] = {"data": line, "errors": [descr]}
-                continue
+        if len(line) == 0:
+            skipped += 1
+            continue
 
-            fields = line.split(FIELDS_SEPARATOR)
-            is_record_valid = 1
-            normalized_fields = []
-            errors = []
-            for i in range(len(fields)):
-                res, data = process_field(fields[i], FIELD_TYPES[i+1])
-                is_record_valid *= res
-                if res:
-                    normalized_fields.append(data)
-                else:
-                    errors.append(data)
+        res, descr = verify_fields_num(line)
+        if not res:
+            reject[record_num] = {"data": line, "errors": [descr]}
+            continue
 
-            if is_record_valid:
-                ok[record_num] = {"name": normalized_fields[0], "email": normalized_fields[1],
-                                  "phone": normalized_fields[2], "group": normalized_fields[3]}
+        fields = line.split(FIELDS_SEPARATOR)
+        is_record_valid = 1
+        normalized_fields = []
+        errors = []
+        for i in range(len(fields)):
+            res, data = process_field(fields[i], FIELD_TYPES[i+1])
+            is_record_valid *= res
+            if res:
+                normalized_fields.append(data)
             else:
-                reject[record_num] = {"data": line, "errors": errors}
+                errors.append(data)
+
+        if is_record_valid:
+            ok[record_num] = {"name": normalized_fields[0], "email": normalized_fields[1],
+                                "phone": normalized_fields[2], "group": normalized_fields[3]}
+        else:
+            reject[record_num] = {"data": line, "errors": errors}
 
     return {"result": True, "description": {"accepted": ok, "rejected": reject, "skipped": skipped}}
 

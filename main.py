@@ -1,10 +1,10 @@
-from questionnaires_processor import read_file
+from questionnaires_processor import process_records
 from config import ACCEPTED_FILE, REJECTED_FILE
 from report import print_accepted_questionnaires, print_rejected_questionnaires, analyze_result
 from storage import save_results
 
 def main():
-    res = read_file()
+    res = process_records()
     if res["result"]:
         print_accepted_questionnaires(res["description"]["accepted"])
         print_rejected_questionnaires(res["description"]["rejected"])

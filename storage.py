@@ -1,4 +1,4 @@
-from config import ACCEPTED_FILE, REJECTED_FILE
+from config import QUEST_FILE, ACCEPTED_FILE, REJECTED_FILE
 
 def save_results(ok, reject):
     with open(ACCEPTED_FILE, "w", encoding="utf-8") as f:
@@ -9,3 +9,10 @@ def save_results(ok, reject):
         for record in reject.values():
             f.write(f"{record["data"]}" + f";[{";".join(record["errors"])}]" + "\n")
 
+def read_file():
+    records = []
+    with open(QUEST_FILE, "r", encoding="utf-8") as f:
+        for line in f:
+            records.append(line)
+
+    return records
