@@ -4,7 +4,8 @@ from report import print_accepted_questionnaires, print_rejected_questionnaires,
 from storage import save_results
 
 def main():
-    res = process_records()
+    input_file = input("Введите название файла с входными данными: ")
+    res = process_records(input_file)
     if res["result"]:
         print_accepted_questionnaires(res["description"]["accepted"])
         print_rejected_questionnaires(res["description"]["rejected"])
