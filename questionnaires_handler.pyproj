@@ -35,6 +35,7 @@
     <Compile Include="storage.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".github\workflows\tests.yml" />
     <Content Include="anketa.txt" />
     <Content Include="errors.txt" />
     <Content Include="ok.txt" />
@@ -51,6 +52,10 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".github\" />
+    <Folder Include=".github\workflows\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
