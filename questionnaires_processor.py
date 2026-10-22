@@ -10,7 +10,9 @@ from storage import read_file
 
 def verify_file(file_name):
     if not os.path.exists(file_name):
-        return False, f"Файл {file_name} не найден"
+        if not os.path.exists(QUEST_FILE):
+            return False, f"Файл {file_name} и файл по умолчанию {QUEST_FILE} не найдены"
+        return True, QUEST_FILE
 
     return True, file_name
 
@@ -37,8 +39,8 @@ def process_field(field, field_type):
 
     return res, data
 
-def process_records():
-    res, descr = verify_file(QUEST_FILE)
+def process_records(input_file):
+    res, descr = verify_file(input_file)
     if not res:
         return {"result": False, "description": descr}
 
@@ -46,7 +48,7 @@ def process_records():
     ok = {}
     skipped = 0
 
-    records = read_file()
+    records = read_file(descr)
     for i in range(len(records)):
         record_num = i + 1
         line = records[i].rstrip("\n")
